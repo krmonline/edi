@@ -1,0 +1,22 @@
+UPDATE    MAIL_STATUS
+SET       STAT_ID = - 40
+WHERE     (STAT_ID = - 20) AND (MAIL_ID NOT IN
+            	(SELECT     mail_Id
+            	FROM          Mail_status
+            	WHERE      stat_ID = - 30 OR STAT_ID = - 40 OR STAT_ID = 0)) 
+	AND (SUBSTRING(MAIL_ID, 7, 1) = '4')
+
+
+
+-------------------------------------------------------------------
+
+SELECT     MS_SUPL.SUPL_ID, MS_SUPL.SUPL_NM, SUBSTRING(MAIL_STATUS.MAIL_ID, 8, 8) AS PODate
+FROM         MAIL_STATUS INNER JOIN
+                      MS_SUPL ON SUBSTRING(MAIL_STATUS.MAIL_ID, 1, 6) COLLATE Thai_CI_AI_KS_WS = MS_SUPL.SUPL_ID
+WHERE     (MAIL_STATUS.STAT_ID = - 20) AND (MS_SUPL.EDI_ODR = 1) AND (NOT (MAIL_STATUS.MAIL_ID IN
+                          (SELECT     mail_Id
+                            FROM          Mail_status
+                            WHERE      stat_ID = - 30 OR
+                                                   STAT_ID = - 40 OR
+                                                   STAT_ID = 0))) AND (SUBSTRING(MAIL_STATUS.MAIL_ID, 7, 1) = '4')
+ORDER BY MAIL_STATUS.MAIL_ID
